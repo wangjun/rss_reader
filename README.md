@@ -8,6 +8,11 @@
 
 目前处在开发阶段，尚未正式使用。
 
+**测试可用浏览器** [建议升至最新版]
+
+Chrome 
+~~Safari~~
+
 [About Me](https://zhimo.ink/about/)
 
 ![使用截图](/dist/img/截图.png)
