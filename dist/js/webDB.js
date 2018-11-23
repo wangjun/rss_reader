@@ -1,7 +1,11 @@
+/**
+* 创建数据库
+*/
+
 var db = openDatabase('zhimo', '1.0', 'rss_reader_db', 50 * 1024 * 1024);
 
 /**
-* 数据库初始化
+* 数据表初始化
 */
 function dbInit() {
     // db.transaction(function (tx) {  

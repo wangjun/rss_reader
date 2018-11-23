@@ -1,3 +1,6 @@
+/**
+* Route 待开发区域
+*/
 function Router() {
     this.routes = {};
     this.currentUrl = '';
@@ -17,26 +20,28 @@ Router.prototype.init = function() {
     window.addEventListener('hashchange', this.refresh.bind(this), false);
 }
 
+/**
+* 页面初始化
+* 考虑用Route方式，待完善
+*/
 window.Router = new Router();
 window.Router.init();
-
 window.onload = function() {
 	dbInit();
 	firstItem();
 	getAllData();
 }
 
-var content = document.getElementById('rss_content');
-
-var currentChannel = window.localStorage.getItem('zhimo_rss_reader');
-if (currentChannel != null) {
-	var channels = currentChannel.split('|');
-}
-
+/**
+* 监听路由变化
+*/
 window.addEventListener('hashchange', function() {
 	getItemFromDb(window.location.hash.substring(1))
 });
 
+/**
+* 简单处理读到的XML并写入数据库
+*/
 function resolve(xml, url) {
 	domParser = new DOMParser();
 	xmlDoc = domParser.parseFromString(xml, 'text/xml');
@@ -44,14 +49,11 @@ function resolve(xml, url) {
 	var title = xmlDoc.getElementsByTagName('title')[0].firstChild.nodeValue;
 	var desc = xmlDoc.getElementsByTagName('description')[0].firstChild.nodeValue;
 	insterData(title, desc, url, xml);
-	// for (var i = 0; i < items.length; i++) {
-	// 	console.log(items[i].getElementsByTagName("title")[0].firstChild.nodeValue); // 标题
-	// 	console.log(items[i].getElementsByTagName("link")[0].firstChild.nodeValue);  // 链接 图片
-	// 	console.log(items[i].getElementsByTagName("guid")[0].firstChild.nodeValue);  // 图片
-	// 	console.log(items[i].getElementsByTagName("description")[0].firstChild.nodeValue); // 内容
-	// }
 }
 
+/**
+* 添加频道
+*/
 function addChannel() {
 	var link = document.getElementById('channel').value;
 	var xhr = new XMLHttpRequest();
