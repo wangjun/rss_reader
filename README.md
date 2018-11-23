@@ -1,15 +1,5 @@
 ## RSS 阅读器
 
-### 当前进展
-
-**version 1.0**
-
-- [x] RSShub搭建
-- [x] 基本展示界面搭建
-- [x] 基本数据库
-- [ ] 数据读取/展示
-- [ ] 频道切换
-
 ### 说明
 
 本项目的数据来源于[RSShub](https://github.com/DIYgod/RSSHub)，界面展示采用[AdminLTE](https://adminlte.io/themes/AdminLTE/index2.html)。
@@ -19,3 +9,30 @@
 目前处在开发阶段，尚未正式使用。
 
 [About Me](https://zhimo.ink/about/)
+
+![使用截图](/dist/img/截图.png)
+
+### 开发进展
+
+**version 1.0**
+
+- [x] RSShub搭建
+- [x] 基本展示界面搭建
+- [x] 基本数据库
+- [x] 数据读取/展示
+- [x] 频道切换
+- [ ] 定时更新（2小时一次）
+
+**version 1.1**
+
+- [ ] 数据库存储结构优化
+- [ ] 自定义订阅频道名称
+
+**version 1.2**
+
+- [ ] 展示样式调整
+
+**version 1.3**
+
+- [ ] 数据云端同步功能,可多端同时使用
+

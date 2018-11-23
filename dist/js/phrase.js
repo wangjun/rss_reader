@@ -22,6 +22,7 @@ window.Router.init();
 
 window.onload = function() {
 	dbInit();
+	firstItem();
 	getAllData();
 }
 
@@ -32,9 +33,9 @@ if (currentChannel != null) {
 	var channels = currentChannel.split('|');
 }
 
-function changeChannel(name) {
-    // content.style.backgroundColor = color;
-}
+window.addEventListener('hashchange', function() {
+	getItemFromDb(window.location.hash.substring(1))
+});
 
 function resolve(xml, url) {
 	domParser = new DOMParser();
