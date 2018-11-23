@@ -73,7 +73,12 @@ function getAllData() {
             var head = '<li class="header">我的订阅</li><li><a href="#"><i class="fa fa-rss"></i> <span>我的订阅列表</span></a></li>';
             var temp = '<li><a href="#SUBSCRIBEID"><i class="fa fa-circle"></i> <span>SUBSCRIBENAME</span></a></li>';
             for (var i = 0; i < len; i++) {
-            	var newStr = temp.replaceAll('SUBSCRIBENAME', result.rows.item(i).title);
+                if (result.rows.item(i).title.length > 10) {
+                    var title = result.rows.item(i).title.substring(0,13) + '...';
+                } else {
+                    var title = result.rows.item(i).title;
+                }
+            	var newStr = temp.replaceAll('SUBSCRIBENAME', title);
                 newStr = newStr.replaceAll('SUBSCRIBEID', result.rows.item(i).id);
             	head += newStr;
             }
