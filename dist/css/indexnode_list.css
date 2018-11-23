@@ -1,0 +1,19 @@
+.tlogo{
+	width:50px;
+	height:50px;
+	border-radius:50%;
+	float: left;
+	background:url(../img/photo4.jpg);
+	background-size: cover;
+}
+.pass{
+	float: left;
+	color:#6BAACA;
+	line-height:20px;
+	margin-left:20px;
+	font-weight:700;
+}
+.ftime{
+	font-size: 12px;
+	float:right;
+}
