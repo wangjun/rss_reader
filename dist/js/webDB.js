@@ -60,6 +60,7 @@ function insterData(title, desc, link, data) {
             layer.msg(title+"该链接已订阅");
         });
     });
+    getAllData();
 }
 
 /**
@@ -132,3 +133,4 @@ function handleXML(xml) {
     }
     document.getElementById('rss_content').innerHTML = data;
 }
+
