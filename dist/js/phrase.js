@@ -68,6 +68,7 @@ function addChannel() {
 		}
 	};
 	xhr.send();
+	document.getElementById('channel').value = '';
 }
 
 /**
@@ -76,5 +77,5 @@ function addChannel() {
 function monitor() {
 	window.setInterval(function() {
 		refreshDB();
-	}, 30 * 60 * 1000);
+	}, decting);
 }

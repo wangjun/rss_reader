@@ -190,7 +190,7 @@ function refreshDB() {
         ctx.executeSql(selectSQL, [], function(ctx, result) {
             var now = parseInt(Date.parse(new Date()) / 1000);
             for (var row = 0; row < result.rows.length; row++) {
-                if (now - result.rows[row]['last_update'] > 50) {
+                if (now - result.rows[row]['last_update'] > expire) {
                     getNewer(result.rows[row]['link'], result.rows[row]['id']);
                 }
             }
