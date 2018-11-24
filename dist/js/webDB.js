@@ -74,6 +74,9 @@ function insterSubscribe(title, desc, link, time, data) {
                 var item_link = items[i].getElementsByTagName("link")[0].firstChild.nodeValue;
                 insertDetail(result['insertId'] ,item_title, item_desc, item_link);
             }
+            if (result['insertId'] == 1) {
+                getRows(result['insertId']);
+            }
         },
         function(tx, error) {
             layer.msg(title+"该链接已订阅");
@@ -172,7 +175,6 @@ function getOneData(title) {
         ctx.executeSql(selectSQL, [title], function(ctx, result) {
             if (result.rows.length > 0) {
                 layer.msg('您已订阅该频道！');
-                return 1;
             }
         },
         function(tx, error) {
