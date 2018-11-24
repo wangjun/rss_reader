@@ -46,3 +46,13 @@ Chrome
 **version 2.0**
 
 - [ ] 在确保基本功能正常的情况下，采用VUE重构前端
+
+
+### 订阅列表
+
+**统一订阅服务域名**
+
+http://rss.zhimo.ink:1200/
+
+订阅说明详见[RSShub文档](https://docs.rsshub.app/#社交媒体)
+
