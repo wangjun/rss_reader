@@ -45,10 +45,11 @@ window.addEventListener('hashchange', function() {
 function resolve(xml, url) {
 	domParser = new DOMParser();
 	xmlDoc = domParser.parseFromString(xml, 'text/xml');
-	var items = xmlDoc.getElementsByTagName('item');
 	var title = xmlDoc.getElementsByTagName('title')[0].firstChild.nodeValue;
 	var desc = xmlDoc.getElementsByTagName('description')[0].firstChild.nodeValue;
-	insterData(title, desc, url, xml);
+	var link = xmlDoc.getElementsByTagName('link')[0].firstChild.nodeValue;
+	var now = parseInt(Date.parse(new Date()) / 1000);
+	insterSubscribe(title, desc, link, now, xml);
 }
 
 /**

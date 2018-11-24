@@ -9,22 +9,30 @@ var db = openDatabase('zhimo', '1.0', 'rss_reader_db', 50 * 1024 * 1024);
 */
 function dbInit() {
     // db.transaction(function (tx) {  
+    //    tx.executeSql('drop table reader_subscribe');
+    // });
+
+    // db.transaction(function (tx) {  
     //    tx.executeSql('drop table reader_data');
     // });
 
 	db.transaction(function (tx) {  
-	   tx.executeSql('CREATE TABLE IF NOT EXISTS reader_data (id INTEGER PRIMARY KEY, title VARCHAR, desc VARCHAR, link unique, data TEXT)');
+	   tx.executeSql('CREATE TABLE IF NOT EXISTS reader_subscribe (id INTEGER PRIMARY KEY, title VARCHAR, desc VARCHAR, link unique, last_update VARCHAR)');
 	});
+
+    db.transaction(function (tx) {  
+       tx.executeSql('CREATE TABLE IF NOT EXISTS reader_data (id INTEGER PRIMARY KEY, channel_id INTEGER, title VARCHAR, desc VARCHAR, link unique)');
+    });
 }
 
 /**
 * 页面初始化
 */
 function firstItem() {
-    var selectALLSQL = 'SELECT * FROM reader_data limit 1';
+    var selectALLSQL = 'SELECT * FROM reader_subscribe limit 1';
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
-            handleXML(result.rows[0]['data']);
+            getRows(result.rows[0]['id']);
         },
         function(tx, error) {
             console.error('查询失败: ' + error.message);
@@ -36,10 +44,10 @@ function firstItem() {
 * 读取任意一条数据
 */
 function getItemFromDb(id) {
-    var selectSQL = 'SELECT * FROM reader_data WHERE id = ?'
+    var selectSQL = 'SELECT * FROM reader_subscribe WHERE id = ?'
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [id], function(ctx, result) {
-            handleXML(result.rows[0]['data']);
+            getRows(result.rows[0]['id']);
         },
         function(tx, error) {
             console.error('查询失败: ' + error.message);
@@ -48,13 +56,23 @@ function getItemFromDb(id) {
 }
 
 /**
-* 数据库写入
+* 写入订阅关系数据表
 */
-function insterData(title, desc, link, data) {
-    var insterTableSQL = 'INSERT INTO reader_data (title, desc, link, data) VALUES (?,?,?,?)';
+function insterSubscribe(title, desc, link, time, data) {
+    var insterTableSQL = 'INSERT INTO reader_subscribe (title, desc, link, last_update) VALUES (?,?,?,?)';
     db.transaction(function(ctx) {
-        ctx.executeSql(insterTableSQL, [title, desc, link, data], function(ctx, result) {
+        ctx.executeSql(insterTableSQL, [title, desc, link, time], function(ctx, result) {
+            console.log(result);
             layer.msg("插入" + title + "成功");
+            domParser = new DOMParser();
+            xmlDoc = domParser.parseFromString(data, 'text/xml');
+            var items = xmlDoc.getElementsByTagName('item');
+            for (var i = 0; i < items.length; i++) {
+                var item_title = items[i].getElementsByTagName("title")[0].firstChild.nodeValue;
+                var item_desc = items[i].getElementsByTagName("description")[0].firstChild.nodeValue;
+                var item_link = items[i].getElementsByTagName("link")[0].firstChild.nodeValue;
+                insertDetail(result['insertId'] ,item_title, item_desc, item_link);
+            }
         },
         function(tx, error) {
             layer.msg(title+"该链接已订阅");
@@ -64,10 +82,22 @@ function insterData(title, desc, link, data) {
 }
 
 /**
+* 写入内容数据表
+*/
+function insertDetail(channel_id, title, desc, link) {
+    var insterTableSQL = 'INSERT INTO reader_data (channel_id, title, desc, link) VALUES (?,?,?,?)';
+    db.transaction(function(ctx) {
+        ctx.executeSql(insterTableSQL, [channel_id, title, desc, link], function(ctx, result) {
+            console.log(result['insertId']);
+        });
+    });
+}
+
+/**
 * 数据库读出
 */
 function getAllData() {
-    var selectALLSQL = 'SELECT * FROM reader_data';
+    var selectALLSQL = 'SELECT * FROM reader_subscribe';
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
             var len = result.rows.length;
@@ -95,7 +125,7 @@ function getAllData() {
 * 数据库按title读取
 */
 function getOneData(title) {
-    var selectSQL = 'SELECT * FROM reader_data WHERE title = ?'
+    var selectSQL = 'SELECT * FROM reader_subscribe WHERE title = ?'
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [title], function(ctx, result) {
                 if (result.rows.length > 0) {
@@ -119,18 +149,29 @@ String.prototype.replaceAll = function(s1,s2){
 /**
 * 处理XML
 */
-function handleXML(xml) {
-    domParser = new DOMParser();
-    xmlDoc = domParser.parseFromString(xml, 'text/xml');
-    var items = xmlDoc.getElementsByTagName('item');
-    var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div></div>';
-    var data = '';
-    for (var i = 0; i < items.length; i++) {
-        var insert = temp_content.replace('ITEMTITLE', items[i].getElementsByTagName("title")[0].firstChild.nodeValue);
-        insert = insert.replace('ITEMDESC', items[i].getElementsByTagName("description")[0].firstChild.nodeValue);
-        insert = insert.replace('ITEMLINK', items[i].getElementsByTagName("link")[0].firstChild.nodeValue);
-        data += insert;
-    }
-    document.getElementById('rss_content').innerHTML = data;
+function getRows(rowid) {
+    var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ?'
+    db.transaction(function(ctx) {
+        ctx.executeSql(selectSQL, [rowid], function(ctx, result) {
+            console.log(result.rows.length);
+                if (result.rows.length == 0) {
+                    layer.msg('该频道暂无内容');
+                } else {
+                    var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div></div>';
+                    var data = '';
+                    for (var i = 0; i < result.rows.length; i++) {
+                        var insert = temp_content.replace('ITEMTITLE', result.rows[i]["title"]);
+                        insert = insert.replace('ITEMDESC', result.rows[i]["desc"]);
+                        insert = insert.replace('ITEMLINK', result.rows[i]["link"]);
+                        data += insert;
+                    }
+                    document.getElementById('rss_content').innerHTML = data;
+                }
+            },
+            function(tx, error) {
+                console.error('查询失败: ' + error.message);
+            });
+    });
+    
 }
 
