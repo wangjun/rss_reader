@@ -220,15 +220,14 @@ function getRows(rowid) {
             if (result.rows.length == 0) {
                 layer.msg('该频道暂无内容');
             } else {
-                var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div></div>';
-                var data = '';
+                var temp_content = '<div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body rss-item">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div>';
                 for (var i = 0; i < result.rows.length; i++) {
+                    var remainder = parseInt(result.rows[i]["id"]) % 4;
                     var insert = temp_content.replace('ITEMTITLE', result.rows[i]["title"]);
                     insert = insert.replace('ITEMDESC', result.rows[i]["desc"]);
                     insert = insert.replace('ITEMLINK', result.rows[i]["link"]);
-                    data += insert;
+                    document.getElementById('rss_content_'+remainder).innerHTML += insert;
                 }
-                document.getElementById('rss_content').innerHTML = data;
             }
         },
         function(tx, error) {

@@ -28,16 +28,24 @@ window.Router = new Router();
 window.Router.init();
 window.onload = function() {
 	dbInit();
-	firstItem();
+	if (window.location.hash.substring(1) == null) {
+		firstItem();
+	} else {
+		getItemFromDb(window.location.hash.substring(1));
+	}
 	getAllData();
 	monitor();
-}
+}           
 
 /**
 * 监听路由变化
 */
 window.addEventListener('hashchange', function() {
-	getItemFromDb(window.location.hash.substring(1))
+	document.getElementById('rss_content_0').innerHTML = '';
+	document.getElementById('rss_content_1').innerHTML = '';
+	document.getElementById('rss_content_2').innerHTML = '';
+	document.getElementById('rss_content_3').innerHTML = '';
+	getItemFromDb(window.location.hash.substring(1));
 });
 
 /**
@@ -61,6 +69,10 @@ function addChannel() {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', link);
 	var data = '';
+	layer.load(1, {
+	  shade: [0.1,'#fff'],
+	  time: 1500
+	});
 	xhr.onreadystatechange = function () {
 	    if (xhr.status === 200 && xhr.readyState === 4) {
 	    	data = xhr.responseText;
@@ -72,7 +84,7 @@ function addChannel() {
 }
 
 /**
-* 每隔30分钟刷新一次数据
+* 每隔几分钟刷新一次数据
 */
 function monitor() {
 	window.setInterval(function() {
