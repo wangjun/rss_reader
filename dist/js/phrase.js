@@ -30,6 +30,7 @@ window.onload = function() {
 	dbInit();
 	firstItem();
 	getAllData();
+	monitor();
 }
 
 /**
@@ -49,7 +50,7 @@ function resolve(xml, url) {
 	var desc = xmlDoc.getElementsByTagName('description')[0].firstChild.nodeValue;
 	var link = xmlDoc.getElementsByTagName('link')[0].firstChild.nodeValue;
 	var now = parseInt(Date.parse(new Date()) / 1000);
-	insterSubscribe(title, desc, link, now, xml);
+	insterSubscribe(title, desc, url, now, xml);
 }
 
 /**
@@ -67,4 +68,13 @@ function addChannel() {
 		}
 	};
 	xhr.send();
+}
+
+/**
+* 每隔30分钟刷新一次数据
+*/
+function monitor() {
+	window.setInterval(function() {
+		refreshDB();
+	}, 30 * 60 * 1000);
 }

@@ -32,7 +32,9 @@ function firstItem() {
     var selectALLSQL = 'SELECT * FROM reader_subscribe limit 1';
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
-            getRows(result.rows[0]['id']);
+            if (result.rows.length != 0) {
+                getRows(result.rows[0]['id']);
+            } 
         },
         function(tx, error) {
             console.error('查询失败: ' + error.message);
@@ -62,7 +64,6 @@ function insterSubscribe(title, desc, link, time, data) {
     var insterTableSQL = 'INSERT INTO reader_subscribe (title, desc, link, last_update) VALUES (?,?,?,?)';
     db.transaction(function(ctx) {
         ctx.executeSql(insterTableSQL, [title, desc, link, time], function(ctx, result) {
-            console.log(result);
             layer.msg("插入" + title + "成功");
             domParser = new DOMParser();
             xmlDoc = domParser.parseFromString(data, 'text/xml');
@@ -80,6 +81,47 @@ function insterSubscribe(title, desc, link, time, data) {
     });
     getAllData();
 }
+
+/**
+* 更新
+*/
+function getNewer(link, channel) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', link);
+    var data = '';
+    xhr.onreadystatechange = function () {
+        if (xhr.status === 200 && xhr.readyState === 4) {
+            data = xhr.responseText;
+            domParser = new DOMParser();
+            xmlDoc = domParser.parseFromString(data, 'text/xml');
+            var items = xmlDoc.getElementsByTagName('item');
+            for (var i = 0; i < items.length; i++) {
+                var item_title = items[i].getElementsByTagName("title")[0].firstChild.nodeValue;
+                var item_desc = items[i].getElementsByTagName("description")[0].firstChild.nodeValue;
+                var item_link = items[i].getElementsByTagName("link")[0].firstChild.nodeValue;
+                insertDetail(channel ,item_title, item_desc, item_link);
+                var now = parseInt(Date.parse(new Date()) / 1000);
+            }
+            updateLastUpdate(channel, now);
+        }
+    };
+    xhr.send();
+}
+
+/**
+* 更新上次更新时间字段
+*/
+function updateLastUpdate(id, time) {
+    var updateDataSQL = 'UPDATE reader_subscribe SET last_update = ? WHERE id = ?';
+    db.transaction(function(ctx, result) {
+        ctx.executeSql(updateDataSQL, [time, id], function(ctx, result) {
+            console.log("更新成功");
+        }, function(tx, error) {
+            console.error('更新失败:' + error.message);
+        });
+    });
+}
+
 
 /**
 * 写入内容数据表
@@ -128,14 +170,34 @@ function getOneData(title) {
     var selectSQL = 'SELECT * FROM reader_subscribe WHERE title = ?'
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [title], function(ctx, result) {
-                if (result.rows.length > 0) {
-                    layer.msg('您已订阅该频道！');
-                    return 1;
+            if (result.rows.length > 0) {
+                layer.msg('您已订阅该频道！');
+                return 1;
+            }
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
+        });
+    });
+}
+
+/**
+* 刷新数据
+*/
+function refreshDB() {
+    var selectSQL = 'SELECT * FROM reader_subscribe'
+    db.transaction(function(ctx) {
+        ctx.executeSql(selectSQL, [], function(ctx, result) {
+            var now = parseInt(Date.parse(new Date()) / 1000);
+            for (var row = 0; row < result.rows.length; row++) {
+                if (now - result.rows[row]['last_update'] > 50) {
+                    getNewer(result.rows[row]['link'], result.rows[row]['id']);
                 }
-            },
-            function(tx, error) {
-                console.error('查询失败: ' + error.message);
-            });
+            }
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
+        });
     });
 }
 
@@ -153,25 +215,23 @@ function getRows(rowid) {
     var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ?'
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [rowid], function(ctx, result) {
-            console.log(result.rows.length);
-                if (result.rows.length == 0) {
-                    layer.msg('该频道暂无内容');
-                } else {
-                    var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div></div>';
-                    var data = '';
-                    for (var i = 0; i < result.rows.length; i++) {
-                        var insert = temp_content.replace('ITEMTITLE', result.rows[i]["title"]);
-                        insert = insert.replace('ITEMDESC', result.rows[i]["desc"]);
-                        insert = insert.replace('ITEMLINK', result.rows[i]["link"]);
-                        data += insert;
-                    }
-                    document.getElementById('rss_content').innerHTML = data;
+            if (result.rows.length == 0) {
+                layer.msg('该频道暂无内容');
+            } else {
+                var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div></div>';
+                var data = '';
+                for (var i = 0; i < result.rows.length; i++) {
+                    var insert = temp_content.replace('ITEMTITLE', result.rows[i]["title"]);
+                    insert = insert.replace('ITEMDESC', result.rows[i]["desc"]);
+                    insert = insert.replace('ITEMLINK', result.rows[i]["link"]);
+                    data += insert;
                 }
-            },
-            function(tx, error) {
-                console.error('查询失败: ' + error.message);
-            });
+                document.getElementById('rss_content').innerHTML = data;
+            }
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
+        });
     });
-    
 }
 
