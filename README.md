@@ -6,12 +6,13 @@
 
 项目1.0阶段采用传统的HTML页面搭建，数据都保存在Web SQL中。
 
-目前处在开发阶段，尚未正式使用。
+当前使用界面比较丑，仅仅做了订阅数据的展示，尚未优化前端展示样式。
 
 **测试可用浏览器** [建议升至最新版]
 
-Chrome 
-~~Safari~~
+- Chrome 
+- ~~Safari~~
+- ~~Firefox~~
 
 [About Me](https://zhimo.ink/about/)
 
