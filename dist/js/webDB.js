@@ -123,7 +123,7 @@ function handleXML(xml) {
     domParser = new DOMParser();
     xmlDoc = domParser.parseFromString(xml, 'text/xml');
     var items = xmlDoc.getElementsByTagName('item');
-    var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</div></div></div></div>';
+    var temp_content = '<div class="col-md-3"><div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body text-center">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div></div>';
     var data = '';
     for (var i = 0; i < items.length; i++) {
         var insert = temp_content.replace('ITEMTITLE', items[i].getElementsByTagName("title")[0].firstChild.nodeValue);
