@@ -8,13 +8,13 @@ var db = openDatabase('zhimo', '1.0', 'rss_reader_db', 50 * 1024 * 1024);
 * 数据表初始化
 */
 function dbInit() {
-    db.transaction(function (tx) {  
-       tx.executeSql('drop table reader_subscribe');
-    });
+    // db.transaction(function (tx) {  
+    //    tx.executeSql('drop table reader_subscribe');
+    // });
 
-    db.transaction(function (tx) {  
-       tx.executeSql('drop table reader_data');
-    });
+    // db.transaction(function (tx) {  
+    //    tx.executeSql('drop table reader_data');
+    // });
 
 	db.transaction(function (tx) {  
 	   tx.executeSql('CREATE TABLE IF NOT EXISTS reader_subscribe (id INTEGER PRIMARY KEY, title VARCHAR, desc VARCHAR, link unique, last_update VARCHAR)');
