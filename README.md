@@ -52,7 +52,7 @@ Chrome
 
 **统一订阅服务域名**
 
-http://rss.zhimo.ink:1200/
+http://rss.zhimo.ink/
 
 订阅说明详见[RSShub文档](https://docs.rsshub.app/#社交媒体)
 
