@@ -33,7 +33,7 @@ function firstItem() {
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
             if (result.rows.length != 0) {
-                getRows(result.rows[0]['id']);
+                getRows(result.rows[0]['id'], 0);
             } 
         },
         function(tx, error) {
@@ -45,11 +45,11 @@ function firstItem() {
 /**
 * 读取任意一条数据
 */
-function getItemFromDb(id) {
+function getItemFromDb(id, page) {
     var selectSQL = 'SELECT * FROM reader_subscribe WHERE id = ?'
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [id], function(ctx, result) {
-            getRows(result.rows[0]['id']);
+            getRows(result.rows[0]['id'], page);
         },
         function(tx, error) {
             console.error('查询失败: ' + error.message);
@@ -215,12 +215,14 @@ String.prototype.replaceAll = function(s1,s2){
 /**
 * 数据展示
 */
-function getRows(rowid) {
-    var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ? order by id desc'
+function getRows(rowid, page) {
+    var start = page * page_num;
+    var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ? order by id desc limit ' + start + ' , ' + page_num;
+    console.log(page);
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [rowid], function(ctx, result) {
             if (result.rows.length == 0) {
-                layer.msg('该频道暂无内容');
+                layer.msg('该频道暂无更多内容');
             } else {
                 var temp_content = '<div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body rss-item">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div>';
                 for (var i = 0; i < result.rows.length; i++) {

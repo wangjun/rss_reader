@@ -31,7 +31,7 @@ window.onload = function() {
 	if (window.location.hash.substring(1) == '') {
 		firstItem();
 	} else {
-		getItemFromDb(window.location.hash.substring(1));
+		getItemFromDb(window.location.hash.substring(1), page);
 	}
 	getAllData();
 	monitor();
@@ -45,7 +45,13 @@ window.addEventListener('hashchange', function() {
 	document.getElementById('rss_content_1').innerHTML = '';
 	document.getElementById('rss_content_2').innerHTML = '';
 	document.getElementById('rss_content_3').innerHTML = '';
-	getItemFromDb(window.location.hash.substring(1));
+	page = 0;
+	getItemFromDb(window.location.hash.substring(1), page);
+});
+
+document.getElementById('loadMore').addEventListener('click', function() {
+	page += 1;
+	getItemFromDb(window.location.hash.substring(1), page);
 });
 
 /**
