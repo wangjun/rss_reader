@@ -20,6 +20,8 @@
 
 ### 开发进展
 
+项目demo[展示地址](http://reader.zhimo.ink/)
+
 **version 1.0**
 
 - [x] RSShub搭建
