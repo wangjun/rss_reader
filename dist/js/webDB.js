@@ -136,6 +136,7 @@ function insertDetail(channel_id, title, desc, link) {
             console.log(result['insertId']);
         });
     });
+    getAllData();
 }
 
 /**
@@ -143,7 +144,7 @@ function insertDetail(channel_id, title, desc, link) {
 * select distinct s.*, (select count(id) from reader_data where channel_id = s.id) as num from reader_subscribe s left join reader_data d on s.id = d.channel_id
 */
 function getAllData() {
-    var selectALLSQL = 'select distinct s.*, (select count(id) from reader_data where channel_id = s.id) as num from reader_subscribe s left join reader_data d on s.id = d.channel_id';
+    var selectALLSQL = 'select distinct s.*, (select count(id) from reader_data where channel_id = s.id) as num from reader_subscribe s left join reader_data d on s.id = d.channel_id order by s.id asc';
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
             var len = result.rows.length;
@@ -203,6 +204,7 @@ function refreshDB() {
             console.error('查询失败: ' + error.message);
         });
     });
+    getAllData();
 }
 
 /**

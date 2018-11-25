@@ -56,10 +56,24 @@
       </a>
 
       <div class="row">
-        <div class="col-md-8"></div>
+        <div class="col-md-6"></div>
+        <div class="col-md-2">
+          <ul class="nav navbar-nav pull-right">
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-gear"></i>
+              </a> 
+            </li>
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-info-circle"></i>
+              </a> 
+            </li>
+          </ul>
+        </div>
         <div class="col-md-3">
           <div class="input-group input-group-sm" style="margin-top:4%">
-            <input type="text" class="form-control" id="channel">
+            <input type="text" class="form-control" id="channel" placeholder="RSS link from rss.zhimo.ink">
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-info btn-flat" onclick="addChannel()">添加</button>
                 </span>
