@@ -140,14 +140,15 @@ function insertDetail(channel_id, title, desc, link) {
 
 /**
 * 数据库读出
+* select distinct s.*, (select count(id) from reader_data where channel_id = s.id) as num from reader_subscribe s left join reader_data d on s.id = d.channel_id
 */
 function getAllData() {
-    var selectALLSQL = 'SELECT * FROM reader_subscribe';
+    var selectALLSQL = 'select distinct s.*, (select count(id) from reader_data where channel_id = s.id) as num from reader_subscribe s left join reader_data d on s.id = d.channel_id';
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
             var len = result.rows.length;
             var head = '<li class="header">我的订阅</li><li><a href="#"><i class="fa fa-rss"></i> <span>我的订阅列表</span></a></li>';
-            var temp = '<li><a href="#SUBSCRIBEID"><i class="fa fa-circle"></i> <span>SUBSCRIBENAME</span></a></li>';
+            var temp = '<li><a href="#SUBSCRIBEID"><i class="fa fa-circle"></i> <span>SUBSCRIBENAME</span><span class="pull-right-container"><span class="label label-default pull-right">SUBSCRIBEROWS</span></span></a></li>';
             for (var i = 0; i < len; i++) {
                 if (result.rows.item(i).title.length > 10) {
                     var title = result.rows.item(i).title.substring(0,13) + '...';
@@ -156,6 +157,7 @@ function getAllData() {
                 }
             	var newStr = temp.replaceAll('SUBSCRIBENAME', title);
                 newStr = newStr.replaceAll('SUBSCRIBEID', result.rows.item(i).id);
+                newStr = newStr.replaceAll('SUBSCRIBEROWS', result.rows.item(i).num);
             	head += newStr;
             }
             document.getElementById('reader_list').innerHTML = head;
@@ -211,10 +213,10 @@ String.prototype.replaceAll = function(s1,s2){
 }
 
 /**
-* 处理XML
+* 数据展示
 */
 function getRows(rowid) {
-    var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ?'
+    var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ? order by id desc'
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [rowid], function(ctx, result) {
             if (result.rows.length == 0) {

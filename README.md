@@ -2,7 +2,7 @@
 
 ### 说明
 
-本项目的数据来源于[RSShub](https://github.com/DIYgod/RSSHub)，界面展示采用[AdminLTE](https://adminlte.io/themes/AdminLTE/index2.html)。
+本项目的数据来源于[RSShub](https://github.com/DIYgod/RSSHub)，界面展示采用[AdminLTE](https://adminlte.io)。
 
 项目1.0阶段采用传统的HTML页面搭建，数据都保存在Web SQL中。
 

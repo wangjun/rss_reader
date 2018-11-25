@@ -28,7 +28,7 @@ window.Router = new Router();
 window.Router.init();
 window.onload = function() {
 	dbInit();
-	if (window.location.hash.substring(1) == null) {
+	if (window.location.hash.substring(1) == '') {
 		firstItem();
 	} else {
 		getItemFromDb(window.location.hash.substring(1));
