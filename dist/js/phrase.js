@@ -42,10 +42,7 @@ window.onload = function() {
 * 监听路由变化
 */
 window.addEventListener('hashchange', function() {
-	document.getElementById('rss_content_0').innerHTML = '';
-	document.getElementById('rss_content_1').innerHTML = '';
-	document.getElementById('rss_content_2').innerHTML = '';
-	document.getElementById('rss_content_3').innerHTML = '';
+	initColoum();
 	page = 0;
 	getItemFromDb(window.location.hash.substring(1), page);
 });
