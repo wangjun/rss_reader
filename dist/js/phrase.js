@@ -27,6 +27,7 @@ Router.prototype.init = function() {
 window.Router = new Router();
 window.Router.init();
 window.onload = function() {
+	calculateSign();
 	initColoum();
 	dbInit();
 	if (window.location.hash.substring(1) == '') {
