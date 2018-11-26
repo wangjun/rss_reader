@@ -44,7 +44,11 @@ window.onload = function() {
 window.addEventListener('hashchange', function() {
 	initColoum();
 	page = 0;
-	getItemFromDb(window.location.hash.substring(1), page);
+	if (window.location.hash.substring(1) == '') {
+		firstItem();
+	} else {
+		getItemFromDb(window.location.hash.substring(1), page);
+	}
 });
 
 /**

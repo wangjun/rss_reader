@@ -59,14 +59,14 @@
         <div class="col-md-6"></div>
         <div class="col-md-2">
           <ul class="nav navbar-nav pull-right">
-            <li class="dropdown user user-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <li class="user user-menu">
+              <a href="javascript:void(0)">
                 <i class="fa fa-gear" data-toggle="modal" data-target="#accountSetting"></i>
               </a> 
             </li>
-            <li class="dropdown user user-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-info-circle"></i>
+            <li class="user user-menu">
+              <a href="javascript:void(0)">
+                <i class="fa fa-info-circle" data-toggle="modal" data-target="#about"></i>
               </a> 
             </li>
           </ul>
@@ -154,10 +154,17 @@
           <h4 class="modal-title" id="myModalLabel">个人账户设置</h4>
         </div>
         <div class="modal-body">
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+           <!--  <div class="user-block">
+              <img class="img-circle" src="dist/img/avatar.png" alt="User Image">
+              <span class="pull-right"><span class="fa fa-sign-out description">退出当前账户</span></span>
+              <span class="username"><a href="#">moutain1@126.com</a></span>
+              <span class="description">上次同步时间：2018-11-26 09:44</span>
+            </div> -->
+            <div class="user-block">
+              <img class="img-circle" src="dist/img/signin.gif" alt="User Image">
+              <span class="username"><a href="login.html">未读取到您的同步账户</a></span>
+              <span class="description">请<a href="login.html">登入</a>账户后来同步您的订阅</span>
+            </div>
         </div>
       </div>
     </div>
@@ -177,6 +184,25 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 说明 -->
+  <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="aboutLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">关于RSS阅读器</h4>
+        </div>
+        <div class="modal-body">
+          <p>关于本项目</p>
+          <p><a href="https://zhimo.ink/rss-reader/" target="_blank">项目说明</a></p>
+          <p>本项目提供基于<a href="https://github.com/DIYgod/RSSHub" target="_blank">RSShub</a>数据来源的网站信息订阅，采用<a href="https://docs.rsshub.app" target="_blank">RSShub的规范</a>，不支持其他来源的RSS订阅。</p>
+          <p>当前版本：v1.2.2</p>
+          <p>每30分钟更新一次订阅信息，由于目前是客户端数据驱动模式，所以长时间没有访问会，有部分订阅内容丢失的现象，目前正在开发服务端，保证所有的订阅内容都能正常保存。如果在使用中遇到bug，请点击<a href="https://github.com/ivone-liu/rss_reader/issues/new">反馈Bug</a>或者<a href="mailto:moutain1@126.com">与我联系</a>。</p>
         </div>
       </div>
     </div>
