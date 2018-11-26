@@ -228,7 +228,7 @@ function getRows(rowid, page) {
             } else {
                 var temp_content = '<div class="box box-solid"><div class="box-header with-border"><h3 class="box-title">ITEMTITLE</h3></div><div class="box-body rss-item">ITEMDESC</div><div class="box-footer"><div class="pull-right"><a href="ITEMLINK" target="_blank">阅读原文</a></div></div></div>';
                 for (var i = 0; i < result.rows.length; i++) {
-                    var remainder = parseInt(result.rows[i]["id"]) % 4;
+                    var remainder = parseInt(result.rows[i]["id"]) % field;
                     var insert = temp_content.replace('ITEMTITLE', result.rows[i]["title"]);
                     insert = insert.replace('ITEMDESC', result.rows[i]["desc"]);
                     insert = insert.replace('ITEMLINK', result.rows[i]["link"]);

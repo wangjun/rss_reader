@@ -27,6 +27,7 @@ Router.prototype.init = function() {
 window.Router = new Router();
 window.Router.init();
 window.onload = function() {
+	initColoum();
 	dbInit();
 	if (window.location.hash.substring(1) == '') {
 		firstItem();
@@ -49,10 +50,26 @@ window.addEventListener('hashchange', function() {
 	getItemFromDb(window.location.hash.substring(1), page);
 });
 
+/**
+* 加载下一页
+*/
 document.getElementById('loadMore').addEventListener('click', function() {
 	page += 1;
 	getItemFromDb(window.location.hash.substring(1), page);
 });
+
+/**
+* 初始化栅格化系统
+*/
+function initColoum() {
+	document.getElementById('rss_content').innerHTML = '';
+	var temp = '<div class="col-md-FIELDWIDTH" id="rss_content_FIELDID"></div>';
+	for (var i = 0; i < field; i++) {
+		var spur = temp.replace('FIELDWIDTH', field_container);
+		spur = spur.replace('FIELDID', i);
+		document.getElementById('rss_content').innerHTML += spur;
+	}
+}
 
 /**
 * 简单处理读到的XML并写入数据库
