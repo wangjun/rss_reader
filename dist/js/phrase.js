@@ -121,7 +121,7 @@ function monitor() {
 * 导出订阅文件
 */
 document.getElementById('output').addEventListener("click", function() {
-	downloadDB();
+	downloadDBasJson();
 });
 
 /**
