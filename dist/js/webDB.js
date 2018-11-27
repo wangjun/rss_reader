@@ -80,12 +80,12 @@ function insterSubscribe(title, desc, link, time, data) {
             if (result['insertId'] == 1) {
                 getRows(result['insertId']);
             }
+            getAllData();
         },
         function(tx, error) {
             layer.msg(title+"该链接已订阅");
         });
     });
-    getAllData();
 }
 
 /**
@@ -109,6 +109,7 @@ function getNewer(link, channel) {
                 var now = parseInt(Date.parse(new Date()) / 1000);
             }
             updateLastUpdate(channel, now);
+            getAllData();
         }
     };
     xhr.send();
@@ -139,7 +140,6 @@ function insertDetail(channel_id, title, desc, link) {
             console.log(result['insertId']);
         });
     });
-    getAllData();
 }
 
 /**
@@ -288,4 +288,5 @@ function addFromFile(data) {
     for (var i = 0; i < data.length; i++) {
         insterSubscribe(data[i]['title'], data[i]['desc'], data[i]['link'], data[i]['last_update'] - 3000, '');
     }
+    getAllData();
 }
