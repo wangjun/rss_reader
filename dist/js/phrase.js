@@ -116,3 +116,7 @@ function monitor() {
 		refreshDB();
 	}, decting);
 }
+
+document.getElementById('output').addEventListener("click", function() {
+	downloadDBasJson();
+});

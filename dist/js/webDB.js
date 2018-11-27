@@ -242,3 +242,29 @@ function getRows(rowid, page) {
     });
 }
 
+/***
+* 导出json文件
+*/
+function downloadDBasJson() {
+    var selectALLSQL = 'select * from reader_subscribe';
+    db.transaction(function(ctx) {
+        ctx.executeSql(selectALLSQL, [], function(ctx, result) {
+            var len = result.rows.length;
+            var data = [];
+            for (var i = 0; i < len; i++) {
+                var item = {};
+                item['title'] = result.rows.item(i).title;
+                item['desc'] = result.rows.item(i).desc;
+                item['link'] = result.rows.item(i).link;
+                item['last_update'] = result.rows.item(i).last_update;
+                data.push(item);
+            }
+            var json = JSON.stringify(data);
+            var blob = new Blob([json], { type: "" });
+            saveAs(blob, "ree_reader.json");
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
+        });
+    });
+}
