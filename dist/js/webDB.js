@@ -67,7 +67,7 @@ function insterSubscribe(title, desc, link, time, data) {
             layer.msg("插入" + title + "成功");
             domParser = new DOMParser();
             if (data == '') {
-                return;
+                getNewer(link, result['insertId']);
             }
             xmlDoc = domParser.parseFromString(data, 'text/xml');
             var items = xmlDoc.getElementsByTagName('item');
