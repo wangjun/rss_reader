@@ -66,6 +66,9 @@ function insterSubscribe(title, desc, link, time, data) {
         ctx.executeSql(insterTableSQL, [title, desc, link, time], function(ctx, result) {
             layer.msg("插入" + title + "成功");
             domParser = new DOMParser();
+            if (data == '') {
+                return;
+            }
             xmlDoc = domParser.parseFromString(data, 'text/xml');
             var items = xmlDoc.getElementsByTagName('item');
             for (var i = 0; i < items.length; i++) {
@@ -267,4 +270,13 @@ function downloadDBasJson() {
             console.error('查询失败: ' + error.message);
         });
     });
+}
+
+/**
+* 从json读取内容并保持
+*/
+function addFromFile(data) {
+    for (var i = 0; i < data.length; i++) {
+        insterSubscribe(data[i]['title'], data[i]['desc'], data[i]['link'], data[i]['last_update'] - 3000, '');
+    }
 }

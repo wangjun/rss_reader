@@ -117,6 +117,25 @@ function monitor() {
 	}, decting);
 }
 
+/**
+* 导出订阅文件
+*/
 document.getElementById('output').addEventListener("click", function() {
-	downloadDBasJson();
+	downloadDB();
+});
+
+/**
+* 导出订阅文件
+*/
+document.getElementById('input').addEventListener("change", function() {
+	var input = document.getElementById('input');
+	if (input.value == '') {
+        return;
+    }
+    var reader = new FileReader();
+    reader.readAsText(input.files[0], "UTF-8");
+    reader.onload = function(evt){ //读取完文件之后会回来这里
+        var fileString = evt.target.result; // 读取文件内容
+        addFromFile(JSON.parse(fileString));
+    }
 });
