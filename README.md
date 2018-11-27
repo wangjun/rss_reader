@@ -16,7 +16,7 @@
 
 [About Me](https://zhimo.ink/about/)
 
-![使用截图](/dist/img/v1.2.3.png)
+![使用截图](/dist/img/v1.2.4_show.png)
 
 ### 开发进展
 
