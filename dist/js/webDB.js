@@ -233,7 +233,6 @@ String.prototype.replaceAll = function(s1,s2){
 function getRows(rowid, page) {
     var start = page * page_num;
     var selectSQL = 'SELECT * FROM reader_data WHERE channel_id = ? order by id desc limit ' + start + ' , ' + page_num;
-    console.log(page);
     db.transaction(function(ctx) {
         ctx.executeSql(selectSQL, [rowid], function(ctx, result) {
             if (result.rows.length == 0) {
