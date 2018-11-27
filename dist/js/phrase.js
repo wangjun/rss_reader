@@ -36,16 +36,7 @@ window.onload = function() {
 		getItemFromDb(window.location.hash.substring(1), page);
 	}
 	getAllData();
-	monitor();
-
-	layer.confirm('是否加载默认订阅配置文件？', {
-	  btn: ['是的','不需要'] //按钮
-	}, function(){
-	  deafultDemo(); // demo使用，正式使用建议删掉
-	}, function(){
-	  layer.msg('请尽情使用~');
-	});
-	
+	monitor();	
 }           
 
 /**

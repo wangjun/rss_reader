@@ -151,6 +151,16 @@ function getAllData() {
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
             var len = result.rows.length;
+            /* demo 展示 */
+            if (len == 0) {
+                layer.confirm('是否加载默认订阅配置文件？', {
+                  btn: ['是的','不需要'] //按钮
+                }, function(){
+                  deafultDemo(); // demo使用，正式使用建议删掉
+                }, function(){
+                  layer.msg('请尽情使用~');
+                });
+            }
             var head = '<li class="header">我的订阅</li><li><a href="#"><i class="fa fa-rss"></i> <span>我的订阅列表</span></a></li>';
             var temp = '<li><a href="#SUBSCRIBEID"><i class="fa fa-circle"></i> <span>SUBSCRIBENAME</span><span class="pull-right-container"><span class="label label-default pull-right">SUBSCRIBEROWS</span></span></a></li>';
             for (var i = 0; i < len; i++) {
