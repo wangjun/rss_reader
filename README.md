@@ -13,10 +13,15 @@
 - Chrome 
 - ~~Safari~~
 - ~~Firefox~~
+- ~~IE~~
 
 [About Me](https://zhimo.ink/about/)
 
 ![使用截图](/dist/img/v1.2.4_show.png)
+
+目前通过导出导出可以实现订阅数据的同步，在服务端完成之前这个同步问题就算是解决了~
+
+![导入文件](/dist/img/v1.2.4.png)
 
 ### 开发进展
 
