@@ -37,6 +37,7 @@ window.onload = function() {
 	}
 	getAllData();
 	monitor();
+	deafultDemo(); // demo使用，正式使用建议删掉
 }           
 
 /**
@@ -125,7 +126,7 @@ document.getElementById('output').addEventListener("click", function() {
 });
 
 /**
-* 导出订阅文件
+* 导入订阅文件
 */
 document.getElementById('input').addEventListener("change", function() {
 	var input = document.getElementById('input');
@@ -137,5 +138,19 @@ document.getElementById('input').addEventListener("change", function() {
     reader.onload = function(evt){ //读取完文件之后会回来这里
         var fileString = evt.target.result; // 读取文件内容
         addFromFile(JSON.parse(fileString));
+        window.setTimeout(function() {
+        	window.location.href="/#2"
+        }, 3000);
     }
 });
+
+/**
+* demo
+*/
+function deafultDemo() {
+	var subscribe = '[{"title":"正在上映的电影","desc":"正在上映的电影 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/douban/movie/playing","last_update":"1543302418.0"},{"title":"AppSolution：智能手机更好用的秘密","desc":"AppSolution：智能手机更好用的秘密 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/ifanr/app","last_update":"1543302418.0"},{"title":"The Verge -  All Posts","desc":"The Verge -  All Posts - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/verge","last_update":"1543302464.0"},{"title":"腾讯大家","desc":"腾讯大家 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/dajia","last_update":"1543302485.0"},{"title":"iDownloadBlog","desc":"iDownloadBlog - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/iDownloadBlog","last_update":"1543302519.0"},{"title":"pixiv 周排行","desc":"2018年11月27日 pixiv 周排行 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/pixiv/ranking/week","last_update":"1543302533.0"},{"title":"微博热搜榜","desc":"实时热点，每分钟更新一次 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/weibo/search/hot","last_update":"1543302586.0"},{"title":"安全客-漏洞cve报告","desc":"安全客-漏洞cve报告 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/aqk/vul","last_update":"1543302617.0"},{"title":"电影首发站","desc":"高清电影 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/dysfz","last_update":"1543302655.0"},{"title":"电影天堂","desc":"电影天堂RSS - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/dytt","last_update":"1543302668.0"},{"title":"動畫瘋最後更新","desc":"動畫瘋最後更新 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/anigamer/new_anime","last_update":"1543302692.0"},{"title":"央视新闻 world","desc":"央视新闻 world - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/cctv/world","last_update":"1543302726.0"},{"title":"中央气象台全国气象预警","desc":"中央气象台全国气象预警 - Made with love by RSSHub(https://github.com/DIYgod/RSSHub)","link":"http://rss.zhimo.ink/weatheralarm","last_update":"1543302748.0"}]';
+	addFromFile(JSON.parse(subscribe));
+    window.setTimeout(function() {
+    	window.location.href="/#2"
+    }, 3000);
+}
