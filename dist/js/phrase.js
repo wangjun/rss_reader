@@ -153,3 +153,18 @@ function deafultDemo() {
     	window.location.href="/#1"
     }, 3000);
 }
+
+/**
+* 禁用部分交互
+*/
+document.oncontextmenu = function(){
+    event.returnValue = false;
+}
+
+document.onselectstart = function(){
+    event.returnValue = false;
+}
+
+document.oncopy = function(){
+    event.returnValue = false;
+}
