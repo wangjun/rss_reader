@@ -27,7 +27,7 @@ Router.prototype.init = function() {
 window.Router = new Router();
 window.Router.init();
 window.onload = function() {
-	calculateSign();
+	// calculateSign(); 服务端同步使用
 	initColoum();
 	dbInit();
 	if (window.location.hash.substring(1) == '') {
