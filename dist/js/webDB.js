@@ -305,10 +305,25 @@ function syncLocaldata() {
                 desc = result.rows.item(i).desc;
                 link = result.rows.item(i).link;
                 syncForLocalData(link, title, desc);
+                updateSyncStatus(result.rows.item(i).id);
             }
         },
         function(tx, error) {
             console.error('查询失败: ' + error.message);
+        });
+    });
+}
+
+/**
+* 更新同步状态
+*/
+function updateSyncStatus(id) {
+    var updateDataSQL = 'UPDATE reader_subscribe SET sync_status = 1 WHERE id = ?';
+    db.transaction(function(ctx, result) {
+        ctx.executeSql(updateDataSQL, [id], function(ctx, result) {
+            console.log("更新成功");
+        }, function(tx, error) {
+            console.error('更新失败:' + error.message);
         });
     });
 }
