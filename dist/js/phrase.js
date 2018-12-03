@@ -38,6 +38,7 @@ window.onload = function() {
 	monitor();	
 	initBaseData();
 	syncLocaldata();
+	syncFromRemote();
 }           
 
 /**
@@ -47,7 +48,7 @@ var name;
 var email;
 var userID;
 var login_status = 0;
-var last_sync = 0;
+var sync_last_time = window.localStorage.getItem('zhimo_RSS_last_time');
 var cur_time = Date.parse(new Date()) / 1000;
 
 function initBaseData() {
@@ -61,7 +62,7 @@ function initBaseData() {
 		document.getElementById('account_info').style.display = 'block';
 		document.getElementById('user_email').innerHTML = email;
 		document.getElementById('last_sync_time').innerHTML = last_sync;
-		window.localStorage.setItem("zhimo_RSS_last_time", cur_time);
+		// 
 	} 
 	document.getElementById('user_name').innerHTML = name;
 }
@@ -200,7 +201,7 @@ document.oncopy = function(){
 * 对已有数据的同步
 * 只同步订阅，不同步具体内容
 */
-function syncForLocalData(link, title, desc) {
+function syncForLocalData(link, title, desc, channel) {
 	var xhr = new XMLHttpRequest();
     var form = new FormData();
     form.append('user', userID);
@@ -212,7 +213,8 @@ function syncForLocalData(link, title, desc) {
         var returnData = JSON.parse(xhr.responseText);
         if (returnData.code == 200) {
         	var myDate = new Date();
-            window.localStorage.setItem("last_sync_time", myDate)
+            window.localStorage.setItem("last_sync_time", myDate);
+            updateSyncStatus(channel);
         } else {
             layer.msg(returnData.message);
         }
@@ -223,16 +225,16 @@ function syncForLocalData(link, title, desc) {
 /**
 * 数据拉取
 */
-function pullDataFromRemote(time, channel) {
+function pullDataFromRemote(channel) {
 	var xhr = new XMLHttpRequest();
-    xhr.open("GET", ajax_url+'/last='+time+"&channel="+channel, true);
+    xhr.open("GET", ajax_url+'/getArticles?last='+sync_last_time+"&channel="+channel, true);
     xhr.onreadystatechange = function () {
         var returnData = JSON.parse(xhr.responseText);
         if (returnData.code == 200) {
-        	var myDate = new Date();
+        	insertDetail(channel, returnData.data.title, returnData.data.desc, returnData.data.link);
         } else {
             layer.msg(returnData.message);
         }
     }
-    xhr.send(form);
+    xhr.send();
 }

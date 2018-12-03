@@ -304,8 +304,8 @@ function syncLocaldata() {
                 title = result.rows.item(i).title;
                 desc = result.rows.item(i).desc;
                 link = result.rows.item(i).link;
-                syncForLocalData(link, title, desc);
-                updateSyncStatus(result.rows.item(i).id);
+                channel_id = result.rows.item(i).id;
+                syncForLocalData(link, title, desc, channel_id);
             }
         },
         function(tx, error) {
@@ -324,6 +324,26 @@ function updateSyncStatus(id) {
             console.log("更新成功");
         }, function(tx, error) {
             console.error('更新失败:' + error.message);
+        });
+    });
+}
+
+
+/***
+* 拉取
+*/
+function syncFromRemote() {
+    var selectALLSQL = 'select * from reader_subscribe';
+    db.transaction(function(ctx) {
+        ctx.executeSql(selectALLSQL, [], function(ctx, result) {
+            var len = result.rows.length;
+            var data = [];
+            for (var i = 0; i < len; i++) {
+                pullDataFromRemote(result.rows.item(i).id);
+            }
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
         });
     });
 }
