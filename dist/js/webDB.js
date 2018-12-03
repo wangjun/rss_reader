@@ -17,7 +17,7 @@ function dbInit() {
     // });
 
 	db.transaction(function (tx) {  
-	   tx.executeSql('CREATE TABLE IF NOT EXISTS reader_subscribe (id INTEGER PRIMARY KEY, title VARCHAR, desc VARCHAR, link unique, last_update VARCHAR)');
+	   tx.executeSql('CREATE TABLE IF NOT EXISTS reader_subscribe (id INTEGER PRIMARY KEY, title VARCHAR, desc VARCHAR, link unique, last_update VARCHAR, sync_status INTEGER default 0)');
 	});
 
     db.transaction(function (tx) {  
