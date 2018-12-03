@@ -60,6 +60,8 @@ function initBaseData() {
 		document.getElementById('account_info').style.display = 'block';
 		document.getElementById('user_email').innerHTML = email;
 		document.getElementById('last_sync_time').innerHTML = last_sync;
+		var timestamp = Date.parse(new Date()) / 1000;
+		window.localStorage.setItem("zhimo_RSS_last_time", timestamp);
 	} 
 	document.getElementById('user_name').innerHTML = name;
 }
