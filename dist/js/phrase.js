@@ -27,7 +27,6 @@ Router.prototype.init = function() {
 window.Router = new Router();
 window.Router.init();
 window.onload = function() {
-	// calculateSign(); 服务端同步使用
 	initColoum();
 	dbInit();
 	if (window.location.hash.substring(1) == '') {
@@ -37,7 +36,33 @@ window.onload = function() {
 	}
 	getAllData();
 	monitor();	
+	initBaseData()
 }           
+
+var name;
+var email;
+var id;
+var login_status = 0;
+var last_sync = 0;
+
+/**
+* 初始化基础同步信息
+*/
+function initBaseData() {
+	name = window.localStorage.getItem('zhimo_RSS_name') == '' ? "Visitor" : window.localStorage.getItem('zhimo_RSS_name');
+	email = window.localStorage.getItem('zhimo_RSS_email') == '' ? "" : window.localStorage.getItem('zhimo_RSS_email');
+	id = window.localStorage.getItem('zhimo_RSS_user') == '' ? "" : window.localStorage.getItem('zhimo_RSS_user');
+	last_sync = window.localStorage.getItem('zhimo_RSS_last') == null ? "未同步" : window.localStorage.getItem('zhimo_RSS_last');
+	if (id != '') {
+		login_status = 1;
+		document.getElementById('induce_info').style.display = 'none';
+		document.getElementById('account_info').style.display = 'block';
+		document.getElementById('user_email').innerHTML = email;
+		document.getElementById('last_sync_time').innerHTML = last_sync;
+	} 
+	document.getElementById('user_name').innerHTML = name;
+
+}
 
 /**
 * 监听路由变化

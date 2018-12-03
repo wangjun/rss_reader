@@ -93,7 +93,7 @@
           <img src="dist/img/avatar5.png" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Ivone Liu</p>
+          <p id="user_name"></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -154,13 +154,13 @@
           <h4 class="modal-title" id="myModalLabel">个人账户设置</h4>
         </div>
         <div class="modal-body">
-           <!--  <div class="user-block">
+            <div class="user-block" id="account_info" style="display:none">
               <img class="img-circle" src="dist/img/avatar.png" alt="User Image">
               <span class="pull-right"><span class="fa fa-sign-out description">退出当前账户</span></span>
-              <span class="username"><a href="#">moutain1@126.com</a></span>
-              <span class="description">上次同步时间：2018-11-26 09:44</span>
-            </div> -->
-            <div class="user-block">
+              <span class="username"><a href="#" id="user_email"></a></span>
+              <span class="description">上次同步时间：<span id="last_sync_time"></span></span>
+            </div>
+            <div class="user-block" id="induce_info">
               <img class="img-circle" src="dist/img/signin.gif" alt="User Image">
               <span class="username"><a href="login.html">未读取到您的同步账户</a></span>
               <span class="description">请<a href="login.html">登入</a>账户后来同步您的订阅</span>
