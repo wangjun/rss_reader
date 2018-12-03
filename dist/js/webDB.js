@@ -295,7 +295,7 @@ function addFromFile(data) {
 * 同步本地数据到云
 */
 function syncLocaldata() {
-    var selectALLSQL = 'select * from reader_subscribe';
+    var selectALLSQL = 'select * from reader_subscribe where sync_status=0';
     db.transaction(function(ctx) {
         ctx.executeSql(selectALLSQL, [], function(ctx, result) {
             var len = result.rows.length;
