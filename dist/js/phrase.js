@@ -36,7 +36,8 @@ window.onload = function() {
 	}
 	getAllData();
 	monitor();	
-	initBaseData()
+	initBaseData();
+	syncLocaldata();
 }           
 
 /**
@@ -44,16 +45,16 @@ window.onload = function() {
 */
 var name;
 var email;
-var id;
+var userID;
 var login_status = 0;
 var last_sync = 0;
 
 function initBaseData() {
 	name = window.localStorage.getItem('zhimo_RSS_name') == null ? "Visitor" : window.localStorage.getItem('zhimo_RSS_name');
 	email = window.localStorage.getItem('zhimo_RSS_email') == null ? "" : window.localStorage.getItem('zhimo_RSS_email');
-	id = window.localStorage.getItem('zhimo_RSS_user') == null ? "" : window.localStorage.getItem('zhimo_RSS_user');
+	userID = window.localStorage.getItem('zhimo_RSS_user') == null ? "" : window.localStorage.getItem('zhimo_RSS_user');
 	last_sync = window.localStorage.getItem('zhimo_RSS_last') == null ? "未同步" : window.localStorage.getItem('zhimo_RSS_last');
-	if (id != '') {
+	if (userID != '') {
 		login_status = 1;
 		document.getElementById('induce_info').style.display = 'none';
 		document.getElementById('account_info').style.display = 'block';
@@ -191,4 +192,28 @@ document.onselectstart = function(){
 
 document.oncopy = function(){
     event.returnValue = false;
+}
+
+/**
+* 对已有数据的同步
+* 只同步订阅，不同步具体内容
+*/
+function syncForLocalData(link, title, desc) {
+	var xhr = new XMLHttpRequest();
+    var form = new FormData();
+    form.append('user', userID);
+    form.append('link', link);
+    form.append('title', title);
+    form.append('desc', desc);
+    xhr.open("POST", ajax_url+'/addRss', true);
+    xhr.onreadystatechange = function () {
+        var returnData = JSON.parse(xhr.responseText);
+        if (returnData.code == 200) {
+        	var myDate = new Date();
+            window.localStorage.setItem("last_sync_time", myDate)
+        } else {
+            layer.msg(returnData.message);
+        }
+    }
+    xhr.send(form);
 }

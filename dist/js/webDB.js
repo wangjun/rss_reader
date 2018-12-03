@@ -290,3 +290,25 @@ function addFromFile(data) {
     }
     getAllData();
 }
+
+/***
+* 同步本地数据到云
+*/
+function syncLocaldata() {
+    var selectALLSQL = 'select * from reader_subscribe';
+    db.transaction(function(ctx) {
+        ctx.executeSql(selectALLSQL, [], function(ctx, result) {
+            var len = result.rows.length;
+            var data = [];
+            for (var i = 0; i < len; i++) {
+                title = result.rows.item(i).title;
+                desc = result.rows.item(i).desc;
+                link = result.rows.item(i).link;
+                syncForLocalData(link, title, desc);
+            }
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
+        });
+    });
+}
