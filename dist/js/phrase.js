@@ -38,7 +38,7 @@ window.onload = function() {
 	monitor();	
 	initBaseData();
 	syncLocaldata();
-	syncFromRemote();
+	// syncFromRemote();
 }           
 
 /**
