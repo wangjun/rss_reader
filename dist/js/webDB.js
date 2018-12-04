@@ -317,10 +317,11 @@ function syncLocaldata() {
 /**
 * 更新同步状态
 */
-function updateSyncStatus(id) {
-    var updateDataSQL = 'UPDATE reader_subscribe SET sync_status = 1 WHERE id = ?';
+function updateSyncStatus(id, server_id) {
+    console.log(id + '---' + server_id)
+    var updateDataSQL = 'UPDATE reader_subscribe SET sync_status = 1, sync_id = ? WHERE id = ?';
     db.transaction(function(ctx, result) {
-        ctx.executeSql(updateDataSQL, [id], function(ctx, result) {
+        ctx.executeSql(updateDataSQL, [server_id, id], function(ctx, result) {
             console.log("更新成功");
         }, function(tx, error) {
             console.error('更新失败:' + error.message);

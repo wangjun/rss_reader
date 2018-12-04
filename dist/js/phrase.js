@@ -211,12 +211,10 @@ function syncForLocalData(link, title, desc, channel) {
     xhr.open("POST", ajax_url+'/addRss', true);
     xhr.onreadystatechange = function () {
         var returnData = JSON.parse(xhr.responseText);
-        if (returnData.code == 200) {
+        if (returnData.code == 200 && xhr.readyState === 4) {
         	var myDate = new Date();
             window.localStorage.setItem("last_sync_time", myDate);
-            updateSyncStatus(channel);
-        } else {
-            layer.msg(returnData.message);
+            updateSyncStatus(channel, returnData.data.id);
         }
     }
     xhr.send(form);
@@ -230,7 +228,7 @@ function pullDataFromRemote(channel) {
     xhr.open("GET", ajax_url+'/getArticles?last='+sync_last_time+"&channel="+channel, true);
     xhr.onreadystatechange = function () {
         var returnData = JSON.parse(xhr.responseText);
-        if (returnData.code == 200) {
+        if (returnData.code == 200 && xhr.readyState === 4) {
         	insertDetail(channel, returnData.data.title, returnData.data.desc, returnData.data.link);
         } else {
             layer.msg(returnData.message);
