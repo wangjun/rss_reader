@@ -229,9 +229,7 @@ function pullDataFromRemote(channel_id, sync_id) {
         var returnData = JSON.parse(xhr.responseText);
         if (returnData.code == 200 && xhr.readyState === 4) {
         	insertDetail(channel_id, returnData.data.title, returnData.data.desc, returnData.data.link);
-        } else {
-            layer.msg(returnData.message);
-        }
+        } 
     }
     xhr.send();
 }
