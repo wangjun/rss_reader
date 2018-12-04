@@ -340,7 +340,7 @@ function syncFromRemote() {
             var len = result.rows.length;
             var data = [];
             for (var i = 0; i < len; i++) {
-                pullDataFromRemote(result.rows.item(i).id);
+                pullDataFromRemote(result.rows.item(i).id, result.rows.item(i).sync_id);
             }
         },
         function(tx, error) {

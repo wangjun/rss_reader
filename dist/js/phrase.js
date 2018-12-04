@@ -38,7 +38,7 @@ window.onload = function() {
 	monitor();	
 	initBaseData();
 	syncLocaldata();
-	// syncFromRemote();
+	syncFromRemote();
 }           
 
 /**
@@ -62,7 +62,6 @@ function initBaseData() {
 		document.getElementById('account_info').style.display = 'block';
 		document.getElementById('user_email').innerHTML = email;
 		document.getElementById('last_sync_time').innerHTML = last_sync;
-		// 
 	} 
 	document.getElementById('user_name').innerHTML = name;
 }
@@ -223,13 +222,13 @@ function syncForLocalData(link, title, desc, channel) {
 /**
 * 数据拉取
 */
-function pullDataFromRemote(channel) {
+function pullDataFromRemote(channel_id, sync_id) {
 	var xhr = new XMLHttpRequest();
-    xhr.open("GET", ajax_url+'/getArticles?last='+sync_last_time+"&channel="+channel, true);
+    xhr.open("GET", ajax_url+'/getArticles?last='+sync_last_time+"&channel="+sync_id, true);
     xhr.onreadystatechange = function () {
         var returnData = JSON.parse(xhr.responseText);
         if (returnData.code == 200 && xhr.readyState === 4) {
-        	insertDetail(channel, returnData.data.title, returnData.data.desc, returnData.data.link);
+        	insertDetail(channel_id, returnData.data.title, returnData.data.desc, returnData.data.link);
         } else {
             layer.msg(returnData.message);
         }
