@@ -39,6 +39,7 @@ window.onload = function() {
 	initBaseData();
 	syncLocaldata();
 	syncFromRemote();
+	syncSubscribeFromRemote();
 }           
 
 /**
@@ -209,11 +210,15 @@ function syncForLocalData(link, title, desc, channel) {
     form.append('desc', desc);
     xhr.open("POST", ajax_url+'/addRss', true);
     xhr.onreadystatechange = function () {
-        var returnData = JSON.parse(xhr.responseText);
-        if (returnData.code == 200 && xhr.readyState === 4) {
-        	var myDate = new Date();
-            window.localStorage.setItem("last_sync_time", myDate);
-            updateSyncStatus(channel, returnData.data.id);
+        if (xhr.status === 200 && xhr.readyState === 4) {
+        	var returnData = JSON.parse(xhr.responseText);
+        	if (returnData.code == 200) {
+        		var myDate = new Date();
+	            window.localStorage.setItem("last_sync_time", myDate);
+	            updateSyncStatus(channel, returnData.data.id);
+        	} else {
+        		layer.msg(returnData.message);
+        	}
         }
     }
     xhr.send(form);
@@ -226,9 +231,32 @@ function pullDataFromRemote(channel_id, sync_id) {
 	var xhr = new XMLHttpRequest();
     xhr.open("GET", ajax_url+'/getArticles?last='+sync_last_time+"&channel="+sync_id, true);
     xhr.onreadystatechange = function () {
-        var returnData = JSON.parse(xhr.responseText);
-        if (returnData.code == 200 && xhr.readyState === 4) {
-        	insertDetail(channel_id, returnData.data.title, returnData.data.desc, returnData.data.link);
+        if (xhr.status === 200 && xhr.readyState === 4) {
+        	var returnData = JSON.parse(xhr.responseText);
+        	if (returnData.code == 200) {
+        		insertDetail(channel_id, returnData.data.title, returnData.data.desc, returnData.data.link);
+        	} else {
+        		layer.msg(returnData.message);
+        	}
+        } 
+    }
+    xhr.send();
+}
+
+/**
+* 订阅频道拉取
+*/
+function pullSubscribeFromRemote(channels) {
+	var xhr = new XMLHttpRequest();
+    xhr.open("GET", ajax_url+'/getSubscribe?channel='+channels, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.status === 200 && xhr.readyState === 4) {
+        	var returnData = JSON.parse(xhr.responseText);
+        	if (returnData.code == 200) {
+        		insterSubscribe(returnData.data.title, returnData.data.desc, returnData.data.link, cur_time, '');
+        	} else {
+        		layer.msg(returnData.message);
+        	}
         } 
     }
     xhr.send();

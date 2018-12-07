@@ -137,7 +137,7 @@ function insertDetail(channel_id, title, desc, link) {
     var insterTableSQL = 'INSERT INTO reader_data (channel_id, title, desc, link) VALUES (?,?,?,?)';
     db.transaction(function(ctx) {
         ctx.executeSql(insterTableSQL, [channel_id, title, desc, link], function(ctx, result) {
-            console.log(result['insertId']);
+            // console.log(result['insertId']);
         });
     });
 }
@@ -306,7 +306,9 @@ function syncLocaldata() {
                 desc = result.rows.item(i).desc;
                 link = result.rows.item(i).link;
                 channel_id = result.rows.item(i).id;
-                syncForLocalData(link, title, desc, channel_id);
+                if (title!= undefined && desc!= undefined && link!= undefined && channel_id!= undefined) {
+                    syncForLocalData(link, title, desc, channel_id);
+                }
             }
         },
         function(tx, error) {
@@ -343,6 +345,28 @@ function syncFromRemote() {
             for (var i = 0; i < len; i++) {
                 pullDataFromRemote(result.rows.item(i).id, result.rows.item(i).sync_id);
             }
+        },
+        function(tx, error) {
+            console.error('查询失败: ' + error.message);
+        });
+    });
+}
+
+/***
+* 拉取订阅的频道
+*/
+function syncSubscribeFromRemote() {
+    var selectALLSQL = 'select sync_id from reader_subscribe';
+    db.transaction(function(ctx) {
+        ctx.executeSql(selectALLSQL, [], function(ctx, result) {
+            var len = result.rows.length;
+            var data = new Array;
+            for (var i = 0; i < len; i++) {
+                if (result.rows.item(i).sync_id != null) {
+                    data.push(result.rows.item(i).sync_id)
+                }
+            }
+            pullSubscribeFromRemote(data.join(","));
         },
         function(tx, error) {
             console.error('查询失败: ' + error.message);
